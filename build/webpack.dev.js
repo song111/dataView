@@ -31,19 +31,16 @@ const devConfig = {
     ],
     devServer: {
         contentBase: './dist',  // 开启服务的文件夹
-        port: 1000,             // 端口
+        port: 4000,             // 端口
         open: true,             // 自动打开浏览器
         hot: true,               // 开启热更新
         overlay: true, // 浏览器页面上显示错误
         historyApiFallback: true,
         proxy: { //通过代理解决本地跨域
-            '/api': {
-                target: 'http://localhost:4000', // 服务端
+            '/source': {
+                target: 'http://localhost:3003', // 服务端
                 changeOrigin: true,
-                ws: true,
-                pathRewrite: {
-                    '^/api': '/api'
-                }
+                ws: true
             }
         }
     }

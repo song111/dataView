@@ -15,9 +15,7 @@ app.use(async (ctx, next) => {
 
 // 静态文件
 app.use(koaStatic(path.resolve(__dirname, staticPath)))
-app.use(sourceRouter.routes(),sourceRouter.allowedMethods())
-// app.use(router.routes());   /*启动路由*/
-// app.use(router.allowedMethods());
+app.use(sourceRouter.routes(), sourceRouter.allowedMethods())
 app.listen(3003, () => {
     console.log('服务运行在localhost:3003 ...')
 })

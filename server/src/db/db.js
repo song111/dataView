@@ -10,7 +10,7 @@ const dbURL = option.db_url + option.db_name; // 数据库连接地址
 
 class Db {
     static getInstance() {
-    /*单例模式  多次实例化实例不共享的问题*/
+        /*单例模式  多次实例化实例不共享的问题*/
         if (!Db.instance) {
             Db.instance = new Db();
         }
@@ -36,17 +36,17 @@ class Db {
                     if (!this.MongoConnection) {
                         // 假如没有connection实例，创建实例
                         this.MongoConnection = mongoose.connection;
-                        this.MongoConnection.on("connected", function(err) {
+                        this.MongoConnection.on("connected", function (err) {
                             if (err) logger.error("Database connection failure");
                         });
-                        this.MongoConnection.on("error", function(err) {
+                        this.MongoConnection.on("error", function (err) {
                             logger.error("Mongoose connected error " + err);
                         });
-                        this.MongoConnection.on("disconnected", function() {
+                        this.MongoConnection.on("disconnected", function () {
                             logger.error("Mongoose disconnected");
                         });
                         process.on("SIGINT", () => {
-                            this.MongoConnection.close(function() {
+                            this.MongoConnection.close(function () {
                                 logger.info("Mongoose disconnected through app termination");
                                 process.exit(0);
                             });
@@ -147,7 +147,7 @@ class Db {
             if (query) {
                 // 需要转number
                 limitNum = parseInt(query.limit); //一页条数
-                skipNum = parseInt(query.limit * query.page); // 跳转到第几条开始
+                skipNum = parseInt(query.limit * (query.page - 1)); // 跳转到第几条开始
             }
             if (collectionModel) {
                 collectionModel

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import './assets/style/index.scss'; // 引入css
+import 'babel-polyfill';
 import 'antd/dist/antd.css';
+import './assets/style/index.scss'; // 引入css
 import App from './router';
 import { Provider } from "mobx-react"
 import { stores } from "./store"
