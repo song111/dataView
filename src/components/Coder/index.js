@@ -1,6 +1,7 @@
-import { UnControlled as CodeMirror } from './node_modules/react-codemirror2'
-
-import React, { PureComponent } from './node_modules/react'
+import { UnControlled as CodeMirror } from 'react-codemirror2'
+import React, { PureComponent } from 'react'
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css'
 
 class Coder extends PureComponent {
 
@@ -8,7 +9,7 @@ class Coder extends PureComponent {
         return (
             <div className="coder">
                 <CodeMirror
-                    value='<h1>I ♥ react-codemirror2</h1>'
+                    value={'{name:"小红"}'}
                     options={{
                         mode: 'xml',
                         theme: 'material',
