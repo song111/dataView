@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
-import { Table, Drawer, Modal } from 'antd';
+import { Table, Drawer, Modal, Input, Button, Icon } from 'antd';
+import _ from 'lodash'
+import Coder from 'src/components/Coder'
+import "./index.scss";
+
+const { Search } = Input;
 
 @inject("sourceStore")
 @observer
@@ -44,8 +49,9 @@ class Source extends Component {
                 render: (text, data) => {
                     return (
                         <div className="operate">
-                            <a onClick={this.handleDelete.bind(this, data.id)} href="javascript:;">删除</a>
-                            <a onClick={this.handleView.bind(this, data)} href="javascript:;">查看</a>
+                            <a onClick={this.handleDelete.bind(this, data.id, data.name)} href="javascript:;">删除</a>
+                            &nbsp; &nbsp; &nbsp;
+                            <a onClick={this.handleView.bind(this, data.id, data.name)} href="javascript:;">查看</a>
                         </div>
                     )
                 }
@@ -53,16 +59,19 @@ class Source extends Component {
         ]
     }
 
-    handleView() {
-        this.props.sourceStore.setDrawerVisible(true)
+
+    handleView(id, name) {
+        this.props.sourceStore.getSourceById(id, name)
     }
 
-    handleDelete(id) {
-        Modal.warning({
-            title: '是否确认删除该数据源？',
+    handleDelete(id, name) {
+        Modal.confirm({
+            title: `是否确认删除 ${name}？`,
             onOk: () => {
                 this.props.sourceStore.deleteSourceById(id)
-            }
+            },
+            cancelText: '取消',
+            okText: "确认"
         })
     }
 
@@ -70,22 +79,51 @@ class Source extends Component {
         this.props.sourceStore.setDrawerVisible(false)
     }
 
+    handleSearch(e) {
+        let key = e.target.value
+        this.props.sourceStore.changeQuery({ searchKey: _.trim(key) })
+    }
 
     render() {
-        const { isDrawerVisible, dataLoading, sourceData } = this.props.sourceStore
+        const { isDrawerVisible, dataLoading, sourceList, sourceTotal, queryParams } = this.props.sourceStore
         return (
-            <div >
+            <div className="source">
+                <div className="options clearfix">
+                    <div className="option-search fl">
+                        <Search
+                            allowClear
+                            placeholder="请输入..."
+                            value={queryParams.searchKey}
+                            onChange={this.handleSearch.bind(this)}
+                            style={{ width: 300 }} />
+                    </div>
+                    <div className="option-buttons fr">
+                        <Button type="primary" icon="plus">新增数据源</Button>
+                    </div>
+                </div>
                 <Table
                     loading={dataLoading}
+                    pagination={{
+                        showSizeChanger: true,
+                        total: sourceTotal,
+                        onShowSizeChange: (pageNum, pageSize) => {
+                            this.props.sourceStore.changeQuery({ pageNum, pageSize })
+                        },
+                        onChange: (pageNum) => {
+                            this.props.sourceStore.changeQuery({ pageNum })
+                        }
+                    }}
                     columns={this.createColumns()}
-                    dataSource={toJS(sourceData)} />
+                    dataSource={toJS(sourceList)} />
                 <Drawer
                     title="Multi-level drawer"
-                    width={'60%'}
+                    width={1100}
                     closable={true}
                     onClose={this.handleDrawerClose.bind(this)}
                     visible={isDrawerVisible}
-                ></Drawer>
+                >
+                    <Coder />
+                </Drawer>
             </div>
         )
     }

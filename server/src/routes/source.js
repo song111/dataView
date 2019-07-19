@@ -8,6 +8,7 @@ router.get("/source/querySources", async ctx => {
     let msg, isSuccess, data, total;
     let query = {}; // 查询条件
     const params = ctx.request.query;
+    console.log(params)
     // 分页搜索
     let pagination = {};
     if (params.pageNum && params.pageSize) {
@@ -17,10 +18,11 @@ router.get("/source/querySources", async ctx => {
         }
     }
     // 搜索关键词
-    if (params.searchkey) {
-        query.name = new RegExp(params.searchkey, "i"); //匹配关键词
+    if (params.searchKey) {
+        query.name = new RegExp(params.searchKey, "i"); //匹配关键词
     }
 
+    console.log(query,pagination)
     try {
         let totalResult = await DB.find("Source", query, {}, {});
         let result = await DB.find("Source", query, pagination, {});

@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { message } from 'antd'
-import qs from 'qs'
 
 // 默认配置
 axios.defaults.baseURL = '/';
@@ -58,7 +57,7 @@ let http = {
             axios({
                 method: 'get',
                 url: url,
-                params: qs.stringify(param),    // 序列化
+                params: param,    // 序列化
                 cancelToken: new CancelToken(c => {
                     cancel = c
                 })

@@ -1,46 +1,75 @@
-import { observable, action, runInAction } from "mobx";
+import { observable, action, runInAction, toJS } from "mobx";
 import { to } from 'src/utils'
 import sourceApi from "src/api/source"
 
 class Source {
-  @observable dataLoading = false
-  @observable isDrawerVisible = false
-  @observable sourceData = []
-  @observable queryParams = {
-      searchkey: "",
-      pageNum: 1,
-      pageSize: 10
-  }
+    @observable dataLoading = false
+    @observable isDrawerVisible = false
+    @observable activeSourceId = ''
+    @observable activeSourceName = ''
+    @observable sourceList = [] // 数据源列表
+    @observable sourceDetail = null // 数据源详情
+    @observable sourceTotal = 0 // 数据源总数
+    @observable queryParams = {
+        searchKey: "",
+        pageNum: 1,
+        pageSize: 10
+    }
 
 
-  @action
-  setDrawerVisible(bool) {
-      this.isDrawerVisible = bool
-  }
+    @action
+    setDrawerVisible(bool) {
+        this.isDrawerVisible = bool
+    }
 
-  @action
-  async querySources() {
-      this.dataLoading = true
-      const [err, result] = await to(sourceApi.querySources(this.queryParams))
-      runInAction(() => {
-          this.dataLoading = false;
-          if (err || result.err) { return }
-          if (result.data.success && result.data.data.length) {
-              this.sourceData = result.data.data
-          }
-      })
-  }
+    @action
+    async querySources() {
+        this.dataLoading = true
+        const [err, result] = await to(sourceApi.querySources(toJS(this.queryParams)))
+        runInAction(() => {
+            this.dataLoading = false;
+            if (err || result.err) { return }
+            if (result.data.success && result.data.data) {
+                this.sourceList = result.data.data.map((item,index)=>{
+                    item.key = index
+                    return item
+                })
+                this.sourceTotal = result.data.total
+            }
+        })
+    }
 
-  @action
-  async deleteSourceById(id){
-      const [err, result] = await to(sourceApi.deleteSourceById(id))
-      runInAction(() => {
-          if (err || result.err) { return }
-          if (result.data.success ) {
-              this.querySources() 
-          }
-      })
-  }
+    // 改变搜索
+    @action
+    changeQuery(params) {
+        this.queryParams = Object.assign({}, this.queryParams, params)
+        this.querySources()
+    }
+
+    @action
+    async getSourceById(id, name) {
+        this.isDrawerVisible = true
+        this.activeSourceId = id
+        this.activeSourceName = name
+        const [err, result] = await to(sourceApi.getSourceById(id))
+        runInAction(() => {
+            if (err || result.err) { return }
+            if (result.data.success && result.data.data) {
+                this.sourceDetail = result.data.data.content
+            }
+        })
+    }
+
+    @action
+    async deleteSourceById(id) {
+        const [err, result] = await to(sourceApi.deleteSourceById(id))
+        runInAction(() => {
+            if (err || result.err) { return }
+            if (result.data.success) {
+                this.querySources()
+            }
+        })
+    }
 }
 
 export default Source;
