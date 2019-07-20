@@ -1,6 +1,8 @@
 import { observable, action, runInAction, toJS } from "mobx";
-import { to } from 'src/utils'
+import { to, generateUUID } from 'src/utils'
 import sourceApi from "src/api/source"
+import { message } from 'antd'
+import _ from 'lodash'
 
 class Source {
     @observable dataLoading = false
@@ -8,18 +10,30 @@ class Source {
     @observable activeSourceId = ''
     @observable activeSourceName = ''
     @observable sourceList = [] // 数据源列表
-    @observable sourceDetail = null // 数据源详情
     @observable sourceTotal = 0 // 数据源总数
     @observable queryParams = {
         searchKey: "",
         pageNum: 1,
         pageSize: 10
     }
+    @observable isAddSourceModalVisible = false
+    @observable activeSourceDetail = {} // 数据源详情
 
+
+    @action
+    setAddSourceModalVisible(bool) {
+        this.isAddSourceModalVisible = bool
+    }
 
     @action
     setDrawerVisible(bool) {
         this.isDrawerVisible = bool
+    }
+
+    @action
+    setActiveSourceDetail(id) {
+        const detail = _.find(this.sourceList, { id })
+        this.activeSourceDetail = _.cloneDeep(detail)
     }
 
     @action
@@ -30,7 +44,7 @@ class Source {
             this.dataLoading = false;
             if (err || result.err) { return }
             if (result.data.success && result.data.data) {
-                this.sourceList = result.data.data.map((item,index)=>{
+                this.sourceList = result.data.data.map((item, index) => {
                     item.key = index
                     return item
                 })
@@ -66,6 +80,27 @@ class Source {
         runInAction(() => {
             if (err || result.err) { return }
             if (result.data.success) {
+                this.querySources()
+            }
+        })
+    }
+
+    @action
+    async addSource(data) {
+        const newSource = Object.assign({},
+            {
+                id: generateUUID(),
+                content: {
+                    fieldMap: [],
+                    data: []
+                }
+            }, data)
+        const [err, result] = await to(sourceApi.addSource(newSource))
+        runInAction(() => {
+            if (err || result.err) { message.error("数据源添加失败！"); return }
+            if (result.data.success) {
+                message.success("数据源添加成功！")
+                this.isAddSourceModalVisible = false
                 this.querySources()
             }
         })

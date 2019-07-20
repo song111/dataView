@@ -3,7 +3,8 @@ import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
 import { Table, Drawer, Modal, Input, Button, Icon } from 'antd';
 import _ from 'lodash'
-import Coder from 'src/components/Coder'
+import AddSourceModal from './addSourceModal'
+import SourceDetail from './sourceDetail'
 import "./index.scss";
 
 const { Search } = Input;
@@ -60,10 +61,13 @@ class Source extends Component {
     }
 
 
+    // 查看数据
     handleView(id, name) {
         this.props.sourceStore.getSourceById(id, name)
+        this.props.sourceStore.setActiveSourceDetail(id)
     }
 
+    // 删除
     handleDelete(id, name) {
         Modal.confirm({
             title: `是否确认删除 ${name}？`,
@@ -75,17 +79,24 @@ class Source extends Component {
         })
     }
 
+    // 关闭查看
     handleDrawerClose() {
         this.props.sourceStore.setDrawerVisible(false)
     }
 
+    // 搜索
     handleSearch(e) {
         let key = e.target.value
         this.props.sourceStore.changeQuery({ searchKey: _.trim(key) })
     }
 
+    //新建
+    handleAddSource(values) {
+        this.props.sourceStore.addSource(values)
+    }
+
     render() {
-        const { isDrawerVisible, dataLoading, sourceList, sourceTotal, queryParams } = this.props.sourceStore
+        const { isDrawerVisible, dataLoading, sourceList, sourceTotal, queryParams, isAddSourceModalVisible,activeSourceDetail } = this.props.sourceStore
         return (
             <div className="source">
                 <div className="options clearfix">
@@ -98,7 +109,11 @@ class Source extends Component {
                             style={{ width: 300 }} />
                     </div>
                     <div className="option-buttons fr">
-                        <Button type="primary" icon="plus">新增数据源</Button>
+                        <Button
+                            type="primary"
+                            icon="plus"
+                            onClick={() => { this.props.sourceStore.setAddSourceModalVisible(true) }}>
+                            新增数据源</Button>
                     </div>
                 </div>
                 <Table
@@ -122,8 +137,13 @@ class Source extends Component {
                     onClose={this.handleDrawerClose.bind(this)}
                     visible={isDrawerVisible}
                 >
-                    <Coder />
+                    <SourceDetail source={activeSourceDetail} />
                 </Drawer>
+                <AddSourceModal
+                    visible={isAddSourceModalVisible}
+                    onAddSource={this.handleAddSource.bind(this)}
+                    onCancle={() => { this.props.sourceStore.setAddSourceModalVisible(false) }}
+                />
             </div>
         )
     }
