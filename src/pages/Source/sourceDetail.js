@@ -1,17 +1,19 @@
 import React, { PureComponent, Fragment } from "react"
 import { Modal, Input, Form, Button } from "antd"
 import PropTypes from 'prop-types'
+import { toJS } from 'mobx'
 import Coder from 'src/components/Coder'
+import { from } from "rxjs";
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
 const formItemLayout = {
     labelCol: {
-        sm: { span: 2 },
+        sm: { span: 2 }
     },
     wrapperCol: {
-        sm: { span: 16 },
-    },
+        sm: { span: 16 }
+    }
 };
 
 
@@ -69,15 +71,15 @@ class SourceDetail extends PureComponent {
                 <Form {...formItemLayout}>
                     <FormItem label="名称" >
                         {
-                            isEdit ? getFieldDecorator('name', {
-                                initalValue: source.name || '',
-                                rules: [{ required: true, message: '请填写名称' }],
-                            })(
-                                <Input placeholder="请填写名称" />
-                            ) :
+                            isEdit ?
+                                getFieldDecorator('name', {
+                                    initalValue: source.name || '',
+                                    rules: [{ required: true, message: '请填写名称' }],
+                                })(
+                                    <Input placeholder="请填写名称" />
+                                ) :
                                 <span>{source.name || ''}</span>
                         }
-
                     </FormItem>
                     <FormItem label="描述" >
                         {
@@ -101,7 +103,7 @@ class SourceDetail extends PureComponent {
                             <Fragment>
                                 <Button onClick={() => { this.handleCancle() }}>取消</Button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <Button type="primary">保存</Button>
+                                <Button type="primary" onClick={() => { this.handleSave() }}>保存</Button>
                             </Fragment>
                             :
                             <Button type="primary" onClick={() => { this.handleEdit() }} >编辑</Button>

@@ -2,8 +2,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2'
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types';
 import 'codemirror/lib/codemirror.css';
-// import 'codemirror/theme/material.css'
-import 'codemirror/theme/paraiso-dark.css'
+import 'codemirror/theme/material.css';
 
 
 class Coder extends PureComponent {
@@ -35,7 +34,7 @@ class Coder extends PureComponent {
                     value={codeStr}
                     options={{
                         mode: { name: "javascript", json: true },
-                        theme: 'paraiso-dark',
+                        theme: 'material',
                         lineNumbers: true
                     }}
                     onChange={(editor, data, value) => { }}

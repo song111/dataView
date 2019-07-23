@@ -96,7 +96,7 @@ class Source extends Component {
     }
 
     render() {
-        const { isDrawerVisible, dataLoading, sourceList, sourceTotal, queryParams, isAddSourceModalVisible,activeSourceDetail } = this.props.sourceStore
+        const { isDrawerVisible, dataLoading, sourceList, sourceTotal, queryParams, isAddSourceModalVisible, activeSourceDetail } = this.props.sourceStore
         return (
             <div className="source">
                 <div className="options clearfix">
@@ -131,13 +131,13 @@ class Source extends Component {
                     columns={this.createColumns()}
                     dataSource={toJS(sourceList)} />
                 <Drawer
-                    title="Multi-level drawer"
+                    title="数据详情"
                     width={1100}
                     closable={true}
                     onClose={this.handleDrawerClose.bind(this)}
                     visible={isDrawerVisible}
                 >
-                    <SourceDetail source={activeSourceDetail} />
+                    <SourceDetail source={toJS(activeSourceDetail) } />
                 </Drawer>
                 <AddSourceModal
                     visible={isAddSourceModalVisible}
