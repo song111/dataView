@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import Home from 'src/pages/Home';
 import Source from 'src/pages/Source'
+import Image from 'src/pages/Image'
 import NotFound from 'src/pages/NotFound'
 
 const { Header, Sider, Content } = Layout;
@@ -38,6 +39,12 @@ class App extends React.Component {
                                     <span>  数据库</span>
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="3">
+                                <Link style={{ color: 'inherit' }} to='/image'>
+                                    <Icon type="file-image" theme="filled" />
+                                    <span>  图片库</span>
+                                </Link>
+                            </Menu.Item>
                         </Menu>
                     </Sider>
                     <Layout>
@@ -54,11 +61,12 @@ class App extends React.Component {
                                 padding: 24,
                                 background: '#fff',
                                 minHeight: 280,
-                                overflowY:'auto'
+                                overflowY: 'auto'
                             }}>
                             <Switch>
                                 <Route exact path="/" component={Home} />
                                 <Route path="/source" component={Source} />
+                                <Route path="/image" component={Image} />
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>

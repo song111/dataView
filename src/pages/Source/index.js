@@ -134,6 +134,7 @@ class Source extends Component {
                     title="数据详情"
                     width={1100}
                     closable={true}
+                    // maskClosable={false}
                     onClose={this.handleDrawerClose.bind(this)}
                     visible={isDrawerVisible}
                 >

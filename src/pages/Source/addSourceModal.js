@@ -57,7 +57,7 @@ class AddSourceModal extends PureComponent {
                     <FormItem label="名称" >
                         {
                             getFieldDecorator('name', {
-                                initalValue: name || '',
+                                initialValue: name || '',
                                 rules: [{ required: true, message: '请填写名称' }],
                             })(
                                 <Input placeholder="请填写名称" />
@@ -68,7 +68,7 @@ class AddSourceModal extends PureComponent {
                     <FormItem label="描述" >
                         {
                             getFieldDecorator('description', {
-                                initalValue: description || '',
+                                initialValue: description || '',
                                 rules: [{ required: true, message: '请填写名称' }],
                             })(
                                 <TextArea

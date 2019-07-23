@@ -1,11 +1,19 @@
-.options{
+.options {
   padding: 20px 10px;
 }
 
-.add-source-modal{
+// 添加数据
+.add-source-modal {
   width: 700px !important;
 }
 
-.source-opeate-btn{
-  padding: 20px 10px ;
+
+// 数据详情
+.source-Detail {
+  .source-opeate-btn {
+    padding: 20px 10px;
+  }
+  .source-code {
+    height: 800px;
+  }
 }

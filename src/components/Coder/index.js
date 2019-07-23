@@ -3,11 +3,14 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
+import './index.scss'
 
 
 class Coder extends PureComponent {
     static propTypes = {
-        codeStr: PropTypes.string
+        codeStr: PropTypes.string,
+        readOnly: PropTypes.bool,
+        onChange: PropTypes.func
     }
     constructor() {
         super()
@@ -28,24 +31,30 @@ class Coder extends PureComponent {
 
     render() {
         const { codeStr } = this.state
+        const { readOnly } = this.props
         return (
-            <div className="coder">
-                <CodeMirror
-                    value={codeStr}
-                    options={{
-                        mode: { name: "javascript", json: true },
-                        theme: 'material',
-                        lineNumbers: true
-                    }}
-                    onChange={(editor, data, value) => { }}
-                />
-            </div>
+            <CodeMirror
+                className="coder"
+                value={codeStr}
+                options={{
+                    mode: { name: "javascript", json: true },
+                    extraKeys: { "Ctrl": "autocomplete" },   //自动提示配置
+                    theme: 'material',
+                    lineNumbers: true,
+                    readOnly
+                }}
+                onChange={(editor) => {
+                    this.props.onChange(editor.getValue())
+                }}
+            />
         )
     }
 }
 
 Coder.defaultProps = {
-    codeStr: '{}'
+    codeStr: '{}',
+    readOnly: false,
+    onChange: () => { }
 }
 
 export default Coder;

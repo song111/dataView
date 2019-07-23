@@ -25,6 +25,7 @@ class SourceDetail extends PureComponent {
         super()
         this.state = {
             isEdit: false,
+            formatError: false,
             source: {
                 name: '',
                 description: '',
@@ -58,14 +59,22 @@ class SourceDetail extends PureComponent {
 
     }
 
-    handleChange(key, value) {
-        console.log(key, value)
+    handleChange(str) {
+        const { formatError, source } = this.state
+        let sourceData = Object.assign({}, source)
+        try {
+            value = JSON.parse(str)
+            this.setState({ formatError: false, })
+            if (formatError) this.setState({ formatError: false })
+        } catch (e) {
+            if (!formatError) this.setState({ formatError: true })
+            return
+        }
     }
-
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { isEdit, source } = this.state
+        const { isEdit, source, formatError } = this.state
         return (
             <div className="source-Detail">
                 <Form {...formItemLayout}>
@@ -73,7 +82,7 @@ class SourceDetail extends PureComponent {
                         {
                             isEdit ?
                                 getFieldDecorator('name', {
-                                    initalValue: source.name || '',
+                                    initialValue: source.name || '',
                                     rules: [{ required: true, message: '请填写名称' }],
                                 })(
                                     <Input placeholder="请填写名称" />
@@ -84,7 +93,7 @@ class SourceDetail extends PureComponent {
                     <FormItem label="描述" >
                         {
                             isEdit ? getFieldDecorator('description', {
-                                initalValue: source.description || '',
+                                initialValue: source.description || '',
                                 rules: [{ required: true, message: '请填写名称' }],
                             })(
                                 <TextArea
@@ -96,7 +105,15 @@ class SourceDetail extends PureComponent {
                         }
                     </FormItem>
                 </Form>
-                <Coder codeStr={JSON.stringify(source.content, null, 2) || '{}'} />
+                <div className="source-code">
+                    <Coder
+                        readOnly={isEdit ? false : true}
+                        codeStr={JSON.stringify(source.content, null, 2) || '{}'}
+                        onChange={(value) => { this.handleChange(value) }} />
+                    {
+                        formatError ? <span className="source-codeError">格式错误</span> : ''
+                    }
+                </div>
                 <div className="source-opeate-btn">
                     {
                         isEdit ?
