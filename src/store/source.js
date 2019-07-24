@@ -107,7 +107,7 @@ class Source {
     }
 
     @action
-    async updateSource(id, data) {
+    async updateSource(id, data, cb) {
         const [err, result] = await to(sourceApi.updateSource(id, data))
         runInAction(() => {
             if (err || result.err) { message.error("数据源更新失败！"); return }
@@ -116,6 +116,7 @@ class Source {
                 this.isAddSourceModalVisible = false
                 this.querySources()
                 this.isDrawerVisible = false
+                cb && cb()
             }
         })
     }

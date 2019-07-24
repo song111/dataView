@@ -64,8 +64,9 @@ class SourceDetail extends PureComponent {
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) { return }
             const newSource = Object.assign({}, source, fieldsValue)
-            this.props.sourceStore.updateSource(id, newSource)
-
+            this.props.sourceStore.updateSource(id, newSource, () => {
+                this.setState({ isEdit: false })
+            })
         })
     }
 
