@@ -105,6 +105,20 @@ class Source {
             }
         })
     }
+
+    @action
+    async updateSource(id, data) {
+        const [err, result] = await to(sourceApi.updateSource(id, data))
+        runInAction(() => {
+            if (err || result.err) { message.error("数据源更新失败！"); return }
+            if (result.data.success) {
+                message.success("数据源更新成功！")
+                this.isAddSourceModalVisible = false
+                this.querySources()
+                this.isDrawerVisible = false
+            }
+        })
+    }
 }
 
 export default Source;

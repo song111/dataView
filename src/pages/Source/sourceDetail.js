@@ -1,9 +1,9 @@
 import React, { PureComponent, Fragment } from "react"
-import { Modal, Input, Form, Button } from "antd"
+import { Modal, Input, Form, Button, message } from "antd"
 import PropTypes from 'prop-types'
+import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
 import Coder from 'src/components/Coder'
-import { from } from "rxjs";
 
 const FormItem = Form.Item
 const TextArea = Input.TextArea
@@ -16,7 +16,8 @@ const formItemLayout = {
     }
 };
 
-
+@inject("sourceStore")
+@observer
 class SourceDetail extends PureComponent {
     static propTypes = {
         source: PropTypes.object
@@ -27,6 +28,7 @@ class SourceDetail extends PureComponent {
             isEdit: false,
             formatError: false,
             source: {
+                id: "",
                 name: '',
                 description: '',
                 content: {
@@ -56,15 +58,24 @@ class SourceDetail extends PureComponent {
     }
 
     handleSave() {
+        const { formatError, source } = this.state
+        const { id } = source
+        if (formatError) { return }
+        this.props.form.validateFields((err, fieldsValue) => {
+            if (err) { return }
+            const newSource = Object.assign({}, source, fieldsValue)
+            this.props.sourceStore.updateSource(id, newSource)
 
+        })
     }
 
     handleChange(str) {
         const { formatError, source } = this.state
         let sourceData = Object.assign({}, source)
         try {
-            value = JSON.parse(str)
-            this.setState({ formatError: false, })
+            const value = JSON.parse(str)
+            sourceData.content = value
+            this.setState({ source: sourceData })
             if (formatError) this.setState({ formatError: false })
         } catch (e) {
             if (!formatError) this.setState({ formatError: true })

@@ -1,8 +1,9 @@
-import { UnControlled as CodeMirror } from 'react-codemirror2'
+import { Controlled as CodeMirror } from 'react-codemirror2'
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
+import 'codemirror/mode/javascript/javascript';
 import './index.scss'
 
 
@@ -25,25 +26,28 @@ class Coder extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { codeStr } = nextProps
-        this.setState({ codeStr })
+        const { codeStr, readOnly } = nextProps
+        if (readOnly) {
+            this.setState({ codeStr })
+        }
     }
 
     render() {
-        const { codeStr } = this.state
         const { readOnly } = this.props
         return (
             <CodeMirror
                 className="coder"
-                value={codeStr}
+                value={this.state.codeStr}
                 options={{
                     mode: { name: "javascript", json: true },
-                    extraKeys: { "Ctrl": "autocomplete" },   //自动提示配置
                     theme: 'material',
                     lineNumbers: true,
                     readOnly
                 }}
-                onChange={(editor) => {
+                onBeforeChange={(editor, data, value) => {
+                    this.setState({ codeStr: value });
+                }}
+                onChange={(editor, data, value) => {
                     this.props.onChange(editor.getValue())
                 }}
             />

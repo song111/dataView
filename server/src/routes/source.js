@@ -22,7 +22,6 @@ router.get("/source/querySources", async ctx => {
         query.name = new RegExp(params.searchKey, "i"); //匹配关键词
     }
 
-    console.log(query,pagination)
     try {
         let totalResult = await DB.find("Source", query, {}, {});
         let result = await DB.find("Source", query, pagination, {});
