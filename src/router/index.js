@@ -5,6 +5,7 @@ import Home from 'src/pages/Home';
 import Source from 'src/pages/Source'
 import Image from 'src/pages/Image'
 import NotFound from 'src/pages/NotFound'
+import logo from 'src/assets/images/dataview_logo.png'
 
 const { Header, Sider, Content } = Layout;
 class App extends React.Component {
@@ -25,7 +26,9 @@ class App extends React.Component {
             <Router>
                 <Layout style={{ height: '100%' }}>
                     <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                        <div className="logo" />
+                        <div className="logo" style={{ textAlign: 'center' }} >
+                            <img src={logo} />
+                        </div>
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1">
                                 <Link style={{ color: 'inherit' }} to='/'>
