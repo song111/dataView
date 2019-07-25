@@ -4,3 +4,14 @@
     margin: 0 5px;
   }
 }
+
+.image-file {
+  cursor: pointer;
+  .image-file-icon {
+    height: 36px;
+    padding: 0 10px;
+  }
+  .image-file-name {
+    color: #424e67;
+  }
+}

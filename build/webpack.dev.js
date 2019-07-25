@@ -41,6 +41,11 @@ const devConfig = {
                 target: 'http://localhost:3003', // 服务端
                 changeOrigin: true,
                 ws: true
+            },
+            '/images': {
+                target: 'http://localhost:3003', // 服务端
+                changeOrigin: true,
+                ws: true
             }
         }
     }
