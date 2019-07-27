@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
-import { Table, Button } from 'antd';
+import { Table, Button, Upload } from 'antd';
 import { dateFormat } from 'src/utils'
 import "./index.scss"
 import dirImg from 'src/assets/images/dir.png'
@@ -107,11 +107,13 @@ class Image extends Component {
             <div className="image">
                 <div className="image-options clearfix">
                     <div className="option-buttons fl">
-                        <Button
-                            type="primary"
-                            icon="upload">
-                            上传图片
-                        </Button>
+                        <Upload>
+                            <Button
+                                type="primary"
+                                icon="upload">
+                                上传图片
+                            </Button>
+                        </Upload>
                     </div>
                     <div className="option-buttons fl">
                         <Button

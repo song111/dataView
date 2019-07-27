@@ -5,11 +5,7 @@ class Api_images {
 
     //图片文件查询
     qyeryImages(pathName) {
-        let path = '';
-        if (pathName.includes('/images')) {
-            path = pathName.replace('/images', '')
-        }
-        return http.get('/images' + path)
+        return http.get('/images/files?pathName=' + pathName)
     }
 }
 
