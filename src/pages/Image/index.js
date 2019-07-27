@@ -8,6 +8,7 @@ import { parseUrl } from 'src/utils'
 import "./index.scss"
 import dirImg from 'src/assets/images/dir.png'
 import picImg from 'src/assets/images/pic.png'
+import DirList from './dirList'
 
 @inject("imagesStore")
 @observer
@@ -100,10 +101,12 @@ class Image extends Component {
                         </Button>
                     </div>
                 </div>
+                <DirList />
                 <Table
                     loading={dataLoading}
                     rowSelection={this.rowSelection}
                     columns={this.createColumns()}
+                    pagination={false}
                     dataSource={toJS(imagesData)} />
             </div>
         )
