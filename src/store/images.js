@@ -16,7 +16,10 @@ class Images {
       runInAction(() => {
           this.dataLoading = false
           if (err) { message.error('目录获取失败！'); return }
-          this.imagesData = res.data.data
+          this.imagesData = res.data.data.map((item,i)=>{
+              item.key=i
+              return item
+          })
       })
   }
 

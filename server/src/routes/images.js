@@ -80,4 +80,14 @@ const imagesRouter = async (ctx, next) => {   // 获取images 文件夹下的文
     };
 }
 
+// 查看图片
+
+
+// 上传图片
+
+
+
+
+
+
 module.exports = imagesRouter

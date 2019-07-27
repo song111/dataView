@@ -1,22 +1,29 @@
-.options {
-  padding: 20px 10px;
-  .option-buttons {
-    margin: 0 5px;
+.image {
+  &-options {
+    padding: 20px 10px;
+    .option-buttons {
+      margin: 0 5px;
+    }
   }
-}
 
-.image-file {
-  cursor: pointer;
-  .image-file-icon {
-    height: 36px;
-    padding: 0 10px;
+  &-file {
+    cursor: pointer;
+    .image-file-icon {
+      height: 36px;
+      padding: 0 10px;
+    }
+    .image-file-name {
+      color: #424e67;
+    }
   }
-  .image-file-name {
-    color: #424e67;
+
+  &-navigation {
+    padding: 10px 5px;
+    &-item {
+      cursor: pointer;
+    }
+    &-root {
+      font-weight: 500;
+    }
   }
-}
-
-
-.images-dir-list{
-  padding: 10px 5px;
 }
