@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
+import { withRouter } from "react-router";
 import { Table, Drawer, Modal, Input, Button, Icon } from 'antd';
+import PropTypes from 'prop-types'
+import { parseUrl } from 'src/utils'
 import "./index.scss"
 import dirImg from 'src/assets/images/dir.png'
 import picImg from 'src/assets/images/pic.png'
@@ -9,18 +12,26 @@ import picImg from 'src/assets/images/pic.png'
 @inject("imagesStore")
 @observer
 class Image extends Component {
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor() {
         super()
         this.state = {
-
+            pathList: ['images']
         }
     }
 
     componentDidMount() {
+        const { pathname, search } = this.props.location
+        console.log(pathname, search)
         this.props.imagesStore.queryImages()
     }
 
     handleClick(fileType, pathName) {
+
         if (fileType === 'dir') {
             this.props.imagesStore.queryImages(pathName)
         }
@@ -99,4 +110,4 @@ class Image extends Component {
     }
 }
 
-export default Image
+export default withRouter(Image) 

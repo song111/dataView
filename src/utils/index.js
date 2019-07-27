@@ -24,4 +24,18 @@ export function generateUUID() {
     });
     return uuid;
 }
-  
+
+// searchparams 解析
+export function parseUrl(url) {
+    let result = {};
+    const query = url.split("?")[1];
+    if (query) {
+        const queryArr = query.split("&");
+        queryArr.forEach(function (item) {
+            let value = item.split("=")[1];
+            let key = item.split("=")[0];
+            result[key] = value;
+        });
+    }
+    return result;
+}
