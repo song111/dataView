@@ -6,12 +6,10 @@ const FormItem = Form.Item
 const TextArea = Input.TextArea
 const formItemLayout = {
     labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 4 }
     },
     wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 18 }
     },
 };
 
@@ -47,11 +45,11 @@ class AddSourceModal extends PureComponent {
                 title="新建数据源"
                 visible={visible}
                 destroyOnClose
-                className="add-source-modal"
+                className="create-dir-modal"
                 okText="确认"
                 cancelText="取消"
                 onOk={() => { this.handleSubmit() }}
-                onCancel={() => { this.props.onCancle() }}
+                onCancel={() => { this.props.onCancel() }}
             >
                 <Form {...formItemLayout} >
                     <FormItem label="名称" >

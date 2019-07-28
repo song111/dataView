@@ -142,7 +142,7 @@ class Source extends Component {
                 <AddSourceModal
                     visible={isAddSourceModalVisible}
                     onAddSource={this.handleAddSource.bind(this)}
-                    onCancle={() => { this.props.sourceStore.setAddSourceModalVisible(false) }}
+                    onCancel={() => { this.props.sourceStore.setAddSourceModalVisible(false) }}
                 />
             </div>
         )

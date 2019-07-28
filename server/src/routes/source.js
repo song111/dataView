@@ -8,7 +8,6 @@ router.get("/source/querySources", async ctx => {
     let msg, isSuccess, data, total;
     let query = {}; // 查询条件
     const params = ctx.request.query;
-    console.log(params)
     // 分页搜索
     let pagination = {};
     if (params.pageNum && params.pageSize) {

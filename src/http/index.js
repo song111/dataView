@@ -68,7 +68,23 @@ let http = {
             })
         })
     },
-
+    // delete请求
+    delete(url, param) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: 'delete',
+                url: url,
+                data: JSON.stringify(param),           //json方式提交
+                cancelToken: new CancelToken(c => {
+                    cancel = c
+                })
+            }).then(res => {
+                resolve(res)
+            }).then(err => {
+                reject(err)
+            })
+        })
+    },
     //post请求
     post(url, param) {
         return new Promise((resolve, reject) => {

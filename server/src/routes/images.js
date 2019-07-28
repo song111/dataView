@@ -2,7 +2,6 @@ const Router = require("koa-router");
 const path = require('path')
 const fs = require('fs')
 const fileType = require('file-type');
-const koaBody = require('koa-body')
 const { promisify } = require('util')
 const { to } = require('../utils/index')
 const statAsync = promisify(fs.stat);
@@ -75,31 +74,21 @@ router.get('/images/files', async (ctx) => {
 // 查看图片
 
 // 上传图片
-router.post('/images/upload', koaBody(), async ctx => {
+router.post('/images/upload', ctx => {
     let msg, isSuccess, data = null;
     const params = ctx.request.body;
-    const { pathName, dirName } = params
-
-
-
-})
-
-
-
-// 新建文件夹
-router.post('/images/createDir', async ctx => {
-    let msg, isSuccess, data = null;
-    const params = ctx.request.body;
-    const { pathName, dirName } = params
-
-    const [err, result] = await to(mkdirAsync(imagesPath + pathName + '/' + dirName))
-    if (err) {
-        msg = `创建文件夹失败！`
-        isSuccess = false
-    } else {
-        msg = `创建文件夹成功！`
+    const { pathName } = params
+    const file = ctx.request.files.file;
+    const url = imagesPath + pathName + '/' + file.name
+    try {
+        const fileReader = fs.createReadStream(file.path);
+        const writeStream = fs.createWriteStream(url);  // 使用 createWriteStream 写入数据，然后使用管道流pipe拼接
+        fileReader.pipe(writeStream);
         isSuccess = true
-        data = result
+        msg = '上传成功'
+    } catch (err) {
+        isSuccess = false
+        msg = '上传失败'
     }
 
     ctx.body = {
@@ -109,12 +98,37 @@ router.post('/images/createDir', async ctx => {
     };
 })
 
+
+// 新建文件夹
+router.post('/images/createDir', async ctx => {
+    console.log(ctx.request)
+    let msg, isSuccess, data = null;
+    // const params = ctx.request.body;
+    // console.log(params)
+    // const { pathName, dirName } = params
+    // const url = imagesPath + pathName + '/' + dirName
+    // const [err, result] = await to(mkdirAsync(url))
+    // if (err) {
+    //     msg = `创建文件夹失败！`
+    //     isSuccess = false
+    // } else {
+    //     msg = `创建文件夹成功！`
+    //     isSuccess = true
+    //     data = result
+    // }
+
+    // ctx.body = {
+    //     success: isSuccess,
+    //     message: msg,
+    //     data: data
+    // };
+})
+
 // 删除文件
 router.delete('/images/removeFile', async ctx => {
     let msg, isSuccess, data = null;
-    const params = ctx.request.body;
-    const { pathName, fileName } = params
-    const url = imagesPath + pathName + '/' + fileName
+    const { pathName } = ctx.query
+    const url = imagesPath + pathName 
 
     if (fs.existsSync(url)) {
         const [err, result] = await to(unlinkAsync(url))
@@ -171,25 +185,25 @@ router.delete('/images/removeDir', async ctx => {
 
 
 
-// 函数
-function deleteDir(url) {
-    let files = [];
-    if (fs.existsSync(url)) {  //判断给定的路径是否存在
-        files = fs.readdirSync(url);   //返回文件和子目录的数组
-        files.forEach(function (file, index) {
-            let curPath = path.join(url, file);
+// // 函数
+// function deleteDir(url) {
+//     let files = [];
+//     if (fs.existsSync(url)) {  //判断给定的路径是否存在
+//         files = fs.readdirSync(url);   //返回文件和子目录的数组
+//         files.forEach(function (file, index) {
+//             let curPath = path.join(url, file);
 
-            if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
-                deleteDir(curPath);
-            } else {
-                fs.unlinkSync(curPath);    //是指定文件，则删除
-            }
-        });
-        fs.rmdirSync(url); //清除文件夹
-    } else {
-        console.log("给定的路径不存在！");
-    }
-}
+//             if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
+//                 deleteDir(curPath);
+//             } else {
+//                 fs.unlinkSync(curPath);    //是指定文件，则删除
+//             }
+//         });
+//         fs.rmdirSync(url); //清除文件夹
+//     } else {
+//         console.log("给定的路径不存在！");
+//     }
+// }
 
 
 module.exports = router

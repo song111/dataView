@@ -130,8 +130,8 @@ class SourceDetail extends PureComponent {
                     {
                         isEdit ?
                             <Fragment>
-                                <Button onClick={() => { this.handleCancle() }}>取消</Button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <Button onClick={() => { this.handleCancel() }}>取消</Button>
+                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <Button type="primary" onClick={() => { this.handleSave() }}>保存</Button>
                             </Fragment>
                             :
