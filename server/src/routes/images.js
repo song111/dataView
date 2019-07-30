@@ -100,13 +100,15 @@ router.post('/images/upload', ctx => {
 
 
 // 新建文件夹
-router.post('/images/createDir', async ctx => {
+router.post('/images/createDir', ctx => {
     console.log(ctx.request)
     let msg, isSuccess, data = null;
+
     // const params = ctx.request.body;
-    // console.log(params)
+    // console.log(params,'params')
     // const { pathName, dirName } = params
     // const url = imagesPath + pathName + '/' + dirName
+    // console.log(url,'url')
     // const [err, result] = await to(mkdirAsync(url))
     // if (err) {
     //     msg = `创建文件夹失败！`
@@ -117,18 +119,20 @@ router.post('/images/createDir', async ctx => {
     //     data = result
     // }
 
-    // ctx.body = {
-    //     success: isSuccess,
-    //     message: msg,
-    //     data: data
-    // };
+    ctx.body = {
+        success: isSuccess,
+        message: msg,
+        data: data
+    };
 })
+
+
 
 // 删除文件
 router.delete('/images/removeFile', async ctx => {
     let msg, isSuccess, data = null;
     const { pathName } = ctx.query
-    const url = imagesPath + pathName 
+    const url = imagesPath + pathName
 
     if (fs.existsSync(url)) {
         const [err, result] = await to(unlinkAsync(url))

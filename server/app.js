@@ -3,13 +3,16 @@ const path = require('path')
 const koaStatic = require('koa-static');
 const koaBodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')
+const logger = require('koa-logger')
 const sourceRouter = require('./src/routes/source')
 const imagesRouter = require('./src/routes/images')
 
 const app = new Koa()
 const staticPath = './static'
 
+app.use(logger())
 app.use(koaBodyParser())
+
 
 // 图片上传
 app.use(koaBody({
@@ -20,12 +23,14 @@ app.use(koaBody({
     }
 }));
 
+// 路由
+app.use(sourceRouter.routes(), sourceRouter.allowedMethods())
+app.use(imagesRouter.routes(), imagesRouter.allowedMethods())
+
 // 静态文件
 app.use(koaStatic(path.resolve(__dirname, staticPath)))
 
-// 路由
-app.use(sourceRouter.routes(), sourceRouter.allowedMethods())
-app.use(imagesRouter.routes(),imagesRouter.allowedMethods())
+
 
 app.listen(3003, () => {
     console.log('服务运行在localhost:3003 ...')
