@@ -100,24 +100,24 @@ router.post('/images/upload', ctx => {
 
 
 // 新建文件夹
-router.post('/images/createDir', ctx => {
+router.post('/images/createDir',async ctx => {
     console.log(ctx.request)
     let msg, isSuccess, data = null;
 
-    // const params = ctx.request.body;
-    // console.log(params,'params')
-    // const { pathName, dirName } = params
-    // const url = imagesPath + pathName + '/' + dirName
-    // console.log(url,'url')
-    // const [err, result] = await to(mkdirAsync(url))
-    // if (err) {
-    //     msg = `创建文件夹失败！`
-    //     isSuccess = false
-    // } else {
-    //     msg = `创建文件夹成功！`
-    //     isSuccess = true
-    //     data = result
-    // }
+    const params = ctx.request.body;
+    console.log(params,'params')
+    const { pathName, dirName } = params
+    const url = imagesPath + pathName + '/' + dirName
+    console.log(url,'url')
+    const [err, result] = await to(mkdirAsync(url))
+    if (err) {
+        msg = `创建文件夹失败！`
+        isSuccess = false
+    } else {
+        msg = `创建文件夹成功！`
+        isSuccess = true
+        data = result
+    }
 
     ctx.body = {
         success: isSuccess,

@@ -53,7 +53,7 @@ class SourceDetail extends PureComponent {
         this.setState({ isEdit: true })
     }
 
-    handleCancle() {
+    handleCancel() {
         this.setState({ isEdit: false, source: this.props.source })
     }
 

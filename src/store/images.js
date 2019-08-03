@@ -30,21 +30,23 @@ class Images {
         runInAction(() => {
             this.dataLoading = false
             if (err) { message.error('目录获取失败！'); return }
-            this.imagesData = res.data.data.map((item, i) => {
-                item.key = i
-                return item
-            })
-            this.imagesData.sort((fileA, fileB) => {  // 排序
-                let fileTypeA = fileA.fileType.toUpperCase().charCodeAt(0);
-                let fileTypeB = fileB.fileType.toUpperCase().charCodeAt(0);
-                if (fileTypeA < fileTypeB) {
-                    return -1;
-                }
-                if (fileTypeA > fileTypeB) {
-                    return 1;
-                }
-                return 0;
-            })
+            if (res.data.data) {
+                this.imagesData = res.data.data.map((item, i) => {
+                    item.key = i
+                    return item
+                })
+                this.imagesData.sort((fileA, fileB) => {  // 排序
+                    let fileTypeA = fileA.fileType.toUpperCase().charCodeAt(0);
+                    let fileTypeB = fileB.fileType.toUpperCase().charCodeAt(0);
+                    if (fileTypeA < fileTypeB) {
+                        return -1;
+                    }
+                    if (fileTypeA > fileTypeB) {
+                        return 1;
+                    }
+                    return 0;
+                })
+            }
         })
     }
 
@@ -84,7 +86,7 @@ class Images {
 
     // 删除图片
     @action
-    async removeFile(pathName){
+    async removeFile(pathName) {
         let [err, res] = await to(imagesApi.removeFile(pathName))
         runInAction(() => {
             if (err) { message.error('文件删除失败！'); return }
