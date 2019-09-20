@@ -31,11 +31,6 @@ class Api_images {
         return http.delete('/images/removeFile?pathName=' + pathName)
     }
 
-
-
-
-
-
 }
 
 export default new Api_images()

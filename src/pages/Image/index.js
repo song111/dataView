@@ -3,12 +3,13 @@ import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
 import { Table, Button, Upload, message, Spin } from 'antd';
 import { dateFormat } from 'src/utils'
-import "./index.scss"
 import dirImg from 'src/assets/images/dir.png'
 import picImg from 'src/assets/images/pic.png'
 import Navigation from './navigation'
 import imagesApi from "src/api/images"
 import CreateDirModal from './createDirModal'
+import "./index.scss"
+
 @inject("imagesStore")
 @observer
 class Image extends Component {
