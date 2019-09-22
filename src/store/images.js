@@ -83,6 +83,15 @@ class Images {
     }
 
     // 删除文件夹
+    @action
+    async removeDir(pathName) {
+        let [err, res] = await to(imagesApi.removeDir(pathName))
+        runInAction(() => {
+            if (err) { message.error('文件夹删除失败！'); return }
+            message.success('文件夹删除成功！')
+            this.queryImages(this.pathName)
+        })
+    }
 
     // 删除图片
     @action

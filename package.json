@@ -4,9 +4,10 @@
   "description": "react 全家桶脚手架",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config ./build/webpack.dev.js",
+    "start": "webpack-dev-server --config ./build/webpack.dev.js",
     "build": "webpack --config ./build/webpack.prod.js",
-    "server": "node ./server/app.js"
+    "server": "node ./server/app.js",
+    "debug": "node --debug ./server/app.js"
   },
   "author": "chrissong",
   "license": "ISC",

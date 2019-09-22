@@ -12,7 +12,6 @@ class Api_images {
         return http.get('/images/files?pathName=' + pathName)
     }
 
-
     /** 新建文件夹 
      * params
      *  @param String params.pathName  // 新建路径
@@ -22,6 +21,13 @@ class Api_images {
         return http.post('/images/createDir', params)
     }
 
+    /** 删除文件夹
+     * params
+     *  @param String params.pathName  // 文件夹路径
+    */
+    removeDir(pathName) {
+        return http.delete('/images/removeDir?pathName=' + pathName)
+    }
 
     /** 删除文件
      * params
@@ -30,6 +36,7 @@ class Api_images {
     removeFile(pathName) {
         return http.delete('/images/removeFile?pathName=' + pathName)
     }
+
 
 }
 

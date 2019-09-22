@@ -100,15 +100,11 @@ router.post('/images/upload', ctx => {
 
 
 // 新建文件夹
-router.post('/images/createDir',async ctx => {
-    console.log(ctx.request)
+router.post('/images/createDir', async ctx => {
     let msg, isSuccess, data = null;
-
     const params = ctx.request.body;
-    console.log(params,'params')
     const { pathName, dirName } = params
     const url = imagesPath + pathName + '/' + dirName
-    console.log(url,'url')
     const [err, result] = await to(mkdirAsync(url))
     if (err) {
         msg = `创建文件夹失败！`
@@ -158,17 +154,16 @@ router.delete('/images/removeFile', async ctx => {
 // 删除文件夹
 router.delete('/images/removeDir', async ctx => {
     let msg, isSuccess, data = null;
-    const params = ctx.request.body;
-    const { pathName, dirName } = params
-    const url = imagesPath + pathName + '/' + dirName
+    const { pathName } = ctx.query
+    const url = imagesPath + pathName
     if (fs.existsSync(url)) {
-        const [err, result] = await to(unlinkAsync(url))
-        if (err) {
-            msg = `文件删除失败！`
-            isSuccess = false
-        } else {
+        try {
+            deleteDir(url)
             msg = `文件删除成功！`
             isSuccess = true
+        } catch (err) {
+            msg = `文件删除失败！`
+            isSuccess = false
         }
     } else {
         msg = `文件夹不存在！`
@@ -189,25 +184,26 @@ router.delete('/images/removeDir', async ctx => {
 
 
 
-// // 函数
-// function deleteDir(url) {
-//     let files = [];
-//     if (fs.existsSync(url)) {  //判断给定的路径是否存在
-//         files = fs.readdirSync(url);   //返回文件和子目录的数组
-//         files.forEach(function (file, index) {
-//             let curPath = path.join(url, file);
-
-//             if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
-//                 deleteDir(curPath);
-//             } else {
-//                 fs.unlinkSync(curPath);    //是指定文件，则删除
-//             }
-//         });
-//         fs.rmdirSync(url); //清除文件夹
-//     } else {
-//         console.log("给定的路径不存在！");
-//     }
-// }
+// 函数
+function deleteDir(url) {
+    console.log(url)
+    let files = [];
+    if (fs.existsSync(url)) {  //判断给定的路径是否存在
+        files = fs.readdirSync(url);   //返回文件和子目录的数组
+        console.log(files)
+        files.forEach(function (file, index) {
+            let curPath = path.join(url, file);
+            if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
+                deleteDir(curPath);
+            } else {
+                fs.unlinkSync(curPath);    //是指定文件，则删除
+            }
+        });
+        fs.rmdirSync(url); //清除文件夹
+    } else {
+        console.log("给定的路径不存在！");
+    }
+}
 
 
 module.exports = router

@@ -33,7 +33,7 @@ class Image extends Component {
     handleNavChange(pathName) {
         this.props.imagesStore.setPathName(pathName)
     }
-    
+
     // 创建目录
     handleCreateDir(dirName) {
         const { pathName } = this.props.imagesStore
@@ -76,7 +76,7 @@ class Image extends Component {
                 render: (text, data) => {
                     return (
                         <div className="image-table-options">
-                            <Button type="primary" onClick={() => { this.props.imagesStore.removeFile(data.pathName) }}> 删除</Button>
+                            <Button type="primary" onClick={() => { this.handleRemove(data.fileType,data.pathName) }}> 删除</Button>
                             &nbsp;  &nbsp;
                             <Button type="primary"> 下载</Button>
                         </div>
@@ -95,6 +95,14 @@ class Image extends Component {
             name: record.name,
         }),
     };
+
+    handleRemove(type,pathName) {
+        if (type==='dir') {
+            this.props.imagesStore.removeDir(pathName)
+        } else {
+            this.props.imagesStore.removeFile(pathName)
+        }
+    }
 
     render() {
         const { imagesData, dataLoading, pathName, uploadLoading, createDirModalVisible } = this.props.imagesStore

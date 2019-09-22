@@ -12,7 +12,7 @@ const prodConfig = {
     output: {
         filename: 'js/[name].[chunkhash].js', // 打包后的文件名称
         path: path.resolve('dist'), // 打包后的目录，必须是绝对路径
-        publicPath: '/', // 打包的根目录下
+        publicPath: './', // 打包的根目录下
     },
     //srouce里面能看到我们写的代码，也能打断点调试代码
     devtool: '',
