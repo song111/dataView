@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const path = require('path')
 const koaStatic = require('koa-static');
-const koaBodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')
 const logger = require('koa-logger')
 const sourceRouter = require('./src/routes/source')
@@ -11,8 +10,6 @@ const app = new Koa()
 const staticPath = './static'
 
 app.use(logger())
-app.use(koaBodyParser())
-
 
 // 图片上传
 app.use(koaBody({
