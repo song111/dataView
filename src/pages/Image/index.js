@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { observer, inject } from "mobx-react"
 import { toJS } from 'mobx'
 import { Table, Button, Upload, message, Spin } from 'antd';
@@ -8,6 +8,7 @@ import picImg from 'src/assets/images/pic.png'
 import Navigation from './navigation'
 import imagesApi from "src/api/images"
 import CreateDirModal from './createDirModal'
+import DisplayModal from './displayModal'
 import "./index.scss"
 
 @inject("imagesStore")
@@ -15,6 +16,10 @@ import "./index.scss"
 class Image extends Component {
     constructor() {
         super()
+        this.state = {
+            displayVisible: false,
+            url: ''
+        }
     }
 
     componentDidMount() {
@@ -40,6 +45,28 @@ class Image extends Component {
         this.props.imagesStore.createDir({ pathName, dirName })
     }
 
+    // 图片点击展示
+    handleImageClick(pathName) {
+        imagesApi.getImageBase64(pathName).then(res => {
+            if (!res.data || (res.data && !res.data.success)) {
+                message.error(res.message)
+                return
+            }
+            this.setState({
+                displayVisible: true,
+                url: res.data.data
+            })
+        })
+    }
+
+
+    handleImageClose() {
+        this.setState({
+            displayVisible: false,
+            url: ''
+        })
+    }
+
     createColumns() {
         return [
             {
@@ -48,7 +75,11 @@ class Image extends Component {
                 render: (text, data) => {
                     return (
                         <div className="image-file" onClick={() => { this.handleClick(data.fileType, data.pathName) }} >
-                            <img className="image-file-icon" src={data.fileType === 'img' ? picImg : dirImg} />
+                            <img
+                                className="image-file-icon"
+                                src={data.fileType === 'img' ? picImg : dirImg}
+                                onClick={() => (data.fileType === 'img') && this.handleImageClick(data.pathName)}
+                            />
                             <span className="image-file-name" >{data.fileName}</span>
                         </div>
                     )
@@ -76,7 +107,7 @@ class Image extends Component {
                 render: (text, data) => {
                     return (
                         <div className="image-table-options">
-                            <Button type="primary" onClick={() => { this.handleRemove(data.fileType,data.pathName) }}> 删除</Button>
+                            <Button type="primary" onClick={() => { this.handleRemove(data.fileType, data.pathName) }}> 删除</Button>
                             &nbsp;  &nbsp;
                             <Button type="primary"> 下载</Button>
                         </div>
@@ -96,8 +127,8 @@ class Image extends Component {
         }),
     };
 
-    handleRemove(type,pathName) {
-        if (type==='dir') {
+    handleRemove(type, pathName) {
+        if (type === 'dir') {
             this.props.imagesStore.removeDir(pathName)
         } else {
             this.props.imagesStore.removeFile(pathName)
@@ -105,6 +136,7 @@ class Image extends Component {
     }
 
     render() {
+        const { displayVisible, url } = this.state
         const { imagesData, dataLoading, pathName, uploadLoading, createDirModalVisible } = this.props.imagesStore
         return (
             <div className="image">
@@ -156,6 +188,11 @@ class Image extends Component {
                     visible={createDirModalVisible}
                     onCreateDir={this.handleCreateDir.bind(this)}
                     onCancel={() => { this.props.imagesStore.setCreateDirModalVisible(false) }}
+                />
+                <DisplayModal
+                    visible={displayVisible}
+                    url={url}
+                    onCancel={() => { this.handleImageClose() }}
                 />
             </div>
         )

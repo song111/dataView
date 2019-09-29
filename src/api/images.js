@@ -6,7 +6,6 @@ class Api_images {
         this.updateExcelUrl = '/images/upload'
     }
 
-
     //图片文件查询
     queryImages(pathName) {
         return http.get('/images/files?pathName=' + pathName)
@@ -37,7 +36,13 @@ class Api_images {
         return http.delete('/images/removeFile?pathName=' + pathName)
     }
 
-
+    /** 获取图片base64 数据
+    * params
+    *  @param String params.pathName  // 文件路径
+   */
+    getImageBase64(pathName) {
+        return http.get('/images/base64?pathName=' + pathName)
+    }
 }
 
 export default new Api_images()

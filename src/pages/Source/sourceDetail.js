@@ -2,7 +2,6 @@ import React, { PureComponent, Fragment } from "react"
 import { Modal, Input, Form, Button, message } from "antd"
 import PropTypes from 'prop-types'
 import { observer, inject } from "mobx-react"
-import { toJS } from 'mobx'
 import Coder from 'src/components/Coder'
 
 const FormItem = Form.Item

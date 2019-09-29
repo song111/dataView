@@ -98,6 +98,27 @@ router.post('/images/upload', ctx => {
     };
 })
 
+router.get('/images/base64', ctx => {
+    let msg, isSuccess, data
+    const { pathName } = ctx.query
+    const url = imagesPath + pathName
+    if (fs.existsSync(url)) {
+        const extname = path.extname(url)
+        const fileData = fs.readFileSync(url, { encoding: 'base64' })
+        data = `data:image/${extname};base64,${fileData}`;
+        isSuccess = true
+        msg = '获取数据成功'
+    } else {
+        isSuccess = false
+        msg = '路径不存在'
+    }
+    ctx.body = {
+        success: isSuccess,
+        message: msg,
+        data: data
+    };
+})
+
 
 // 新建文件夹
 router.post('/images/createDir', async ctx => {
@@ -182,15 +203,11 @@ router.delete('/images/removeDir', async ctx => {
 // 修改文件名称
 
 
-
-
 // 函数
 function deleteDir(url) {
-    console.log(url)
     let files = [];
     if (fs.existsSync(url)) {  //判断给定的路径是否存在
         files = fs.readdirSync(url);   //返回文件和子目录的数组
-        console.log(files)
         files.forEach(function (file, index) {
             let curPath = path.join(url, file);
             if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调

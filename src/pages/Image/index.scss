@@ -28,6 +28,14 @@
   }
 }
 
-.create-dir-modal{
+.create-dir-modal {
   width: 600px !important;
+}
+
+.display_image_modal {
+  width: 700px !important;
+
+  .image_container {
+    height: 500px;
+  }
 }
