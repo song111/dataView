@@ -34,17 +34,8 @@ class Images {
                 this.imagesData = res.data.data.map((item, i) => {
                     item.key = i
                     return item
-                })
-                this.imagesData.sort((fileA, fileB) => {  // 排序
-                    let fileTypeA = fileA.fileType.toUpperCase().charCodeAt(0);
-                    let fileTypeB = fileB.fileType.toUpperCase().charCodeAt(0);
-                    if (fileTypeA < fileTypeB) {
-                        return -1;
-                    }
-                    if (fileTypeA > fileTypeB) {
-                        return 1;
-                    }
-                    return 0;
+                }).sort((fileA, fileB) => {  // 排序
+                    return -(fileA.isDir - fileB.isDir)
                 })
             }
         })

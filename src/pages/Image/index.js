@@ -28,8 +28,8 @@ class Image extends Component {
     }
 
     // 点击文件
-    handleClick(fileType, pathName) {
-        if (fileType === 'dir') {
+    handleClick(isDir, pathName) {
+        if (isDir) {
             this.props.imagesStore.setPathName(pathName)
         }
     }
@@ -74,11 +74,11 @@ class Image extends Component {
                 dataIndex: "fileName",
                 render: (text, data) => {
                     return (
-                        <div className="image-file" onClick={() => { this.handleClick(data.fileType, data.pathName) }} >
+                        <div className="image-file" onClick={() => { this.handleClick(data.isDir, data.pathName) }} >
                             <img
                                 className="image-file-icon"
-                                src={data.fileType === 'img' ? picImg : dirImg}
-                                onClick={() => (data.fileType === 'img') && this.handleImageClick(data.pathName)}
+                                src={data.isDir ? dirImg : picImg}
+                                onClick={() => (!data.isDir) && this.handleImageClick(data.pathName)}
                             />
                             <span className="image-file-name" >{data.fileName}</span>
                         </div>
@@ -88,7 +88,7 @@ class Image extends Component {
                 title: "大小",
                 dataIndex: "size",
                 width: 120,
-                render: (text, data) => { return data.fileType === 'dir' ? '--' : text }
+                render: (text, data) => { return data.isDir ? '--' : text }
             }, {
                 title: "创建时间",
                 dataIndex: "createTime",
@@ -107,7 +107,7 @@ class Image extends Component {
                 render: (text, data) => {
                     return (
                         <div className="image-table-options">
-                            <Button type="primary" onClick={() => { this.handleRemove(data.fileType, data.pathName) }}> 删除</Button>
+                            <Button type="primary" onClick={() => { this.handleRemove(data.isDir, data.pathName) }}> 删除</Button>
                             &nbsp;  &nbsp;
                             <Button type="primary"> 下载</Button>
                         </div>
@@ -127,8 +127,8 @@ class Image extends Component {
         }),
     };
 
-    handleRemove(type, pathName) {
-        if (type === 'dir') {
+    handleRemove(isDir, pathName) {
+        if (isDir) {
             this.props.imagesStore.removeDir(pathName)
         } else {
             this.props.imagesStore.removeFile(pathName)

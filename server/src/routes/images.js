@@ -13,6 +13,7 @@ const unlinkAsync = promisify(fs.unlink)
 const imageExt = ['jpg', 'png', 'jpeg', 'gif']
 const imagesPath = path.resolve(__dirname, '../../')
 
+const ImgConverter = require('img-converter')
 const router = new Router()
 // 根目录查询
 router.get('/images/files', async (ctx) => {
@@ -40,7 +41,7 @@ router.get('/images/files', async (ctx) => {
                             size: stat.size,
                             createTime: stat.birthtime,
                             modifyTime: stat.mtime,
-                            fileType: 'dir'
+                            isDir: 1
                         })
                     } else {
                         let [err, file] = await to(readFileAsync(imagesPath + pathName + '/' + fileName))
@@ -55,7 +56,7 @@ router.get('/images/files', async (ctx) => {
                                     size: stat.size,
                                     createTime: stat.birthtime,
                                     modifyTime: stat.mtime,
-                                    fileType: 'img'
+                                    isDir: 0
                                 })
                             }
                         }
